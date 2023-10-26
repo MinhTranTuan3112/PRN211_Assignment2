@@ -15,14 +15,14 @@ create table Member (
 
 insert into Member (MemberId, Email, CompanyName, City, Country, [Password])
 values
-(1, 'john.doe@example.com', 'Tech Corp', 'Hanoi', 'Vietnam', 'Johndoe123'),
+(1,'john.doe@example.com', 'Tech Corp', 'Hanoi', 'Vietnam', 'Johndoe123'),
 (2, 'jane.smith@example.com', 'Innovate Ltd', 'TP.HCM', 'Vietnam', 'Janesmith456'),
 (3, 'michael.nguyen@example.com', 'BuildIt Inc', 'Da Nang', 'Vietnam', 'Michaelnguyen789'),
 (4, 'minh.tran@example.com', 'Pkmn', 'TP.HCM', 'Vietnam', 'minhtran3112'),
 (5, 'james.vo@example.com', 'Create Solutions', 'Hue', 'Vietnam', 'Jamesvo345');
 
 create table [Order](
-  OrderId int not null primary key,
+  OrderId int identity(1,1) not null primary key,
   MemberId int not null,
   OrderDate datetime not null, 
   RequiredDate datetime,
@@ -33,13 +33,21 @@ create table [Order](
 );
 
 create table Product(
-  ProductId int not null primary key,  
+  ProductId int identity(1,1) not null primary key,  
   CategoryId int not null,
   ProductName varchar(40) not null,
   [Weight] varchar(20) not null,
   UnitPrice money not null,
   UnitsInStock int not null
 );
+
+insert into Product (CategoryId, ProductName, [Weight], UnitPrice, UnitsInStock)
+values
+(101, 'Apple iPhone 13', '174g', 699.00, 1000),
+(102, 'Samsung Galaxy S21', '171g', 799.99, 800),
+(103, 'Google Pixel 6 Pro', '210g', 899.00, 700),
+(104, 'OnePlus 9 Pro', '197g', 969.00, 600);
+
 
 create table OrderDetail(
   OrderId int not null,

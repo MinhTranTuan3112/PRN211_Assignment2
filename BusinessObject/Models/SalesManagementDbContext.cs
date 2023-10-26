@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.Json;
+
 namespace BusinessObject.Models;
 
 public partial class SalesManagementDbContext : DbContext
@@ -32,6 +32,7 @@ public partial class SalesManagementDbContext : DbContext
         return configuration["ConnectionStrings:DefaultConnection"];
     }
 
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer(GetConnectionString());
 
@@ -39,7 +40,7 @@ public partial class SalesManagementDbContext : DbContext
     {
         modelBuilder.Entity<Member>(entity =>
         {
-            entity.HasKey(e => e.MemberId).HasName("PK__Member__0CF04B183310FF69");
+            entity.HasKey(e => e.MemberId).HasName("PK__Member__0CF04B1807AB0BFD");
 
             entity.ToTable("Member");
 
@@ -68,11 +69,10 @@ public partial class SalesManagementDbContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Order__C3905BCF8F8143F6");
+            entity.HasKey(e => e.OrderId).HasName("PK__Order__C3905BCFB283C6B2");
 
             entity.ToTable("Order");
 
-            entity.Property(e => e.OrderId).ValueGeneratedNever();
             entity.Property(e => e.Freight).HasColumnType("money");
             entity.Property(e => e.OrderDate).HasColumnType("datetime");
             entity.Property(e => e.RequiredDate).HasColumnType("datetime");
@@ -86,7 +86,7 @@ public partial class SalesManagementDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ProductId }).HasName("PK__OrderDet__08D097A31F90955F");
+            entity.HasKey(e => new { e.OrderId, e.ProductId }).HasName("PK__OrderDet__08D097A3BE234C32");
 
             entity.ToTable("OrderDetail");
 
@@ -105,11 +105,10 @@ public partial class SalesManagementDbContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6CD2B3F60FB");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6CD77D94318");
 
             entity.ToTable("Product");
 
-            entity.Property(e => e.ProductId).ValueGeneratedNever();
             entity.Property(e => e.ProductName)
                 .IsRequired()
                 .HasMaxLength(40)

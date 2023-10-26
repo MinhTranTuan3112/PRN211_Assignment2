@@ -32,14 +32,20 @@
             membersToolStripMenuItem = new ToolStripMenuItem();
             ordersToolStripMenuItem = new ToolStripMenuItem();
             productsToolStripMenuItem = new ToolStripMenuItem();
+            logOutToolStripMenuItem = new ToolStripMenuItem();
+            exitToolStripMenuItem = new ToolStripMenuItem();
             lbWelcome = new Label();
+            gbContent = new GroupBox();
+            viewOrdersToolStripMenuItem = new ToolStripMenuItem();
+            orderManagementToolStripMenuItem = new ToolStripMenuItem();
             mainMenuStrip.SuspendLayout();
+            gbContent.SuspendLayout();
             SuspendLayout();
             // 
             // mainMenuStrip
             // 
             mainMenuStrip.ImageScalingSize = new Size(20, 20);
-            mainMenuStrip.Items.AddRange(new ToolStripItem[] { membersToolStripMenuItem, ordersToolStripMenuItem, productsToolStripMenuItem });
+            mainMenuStrip.Items.AddRange(new ToolStripItem[] { membersToolStripMenuItem, ordersToolStripMenuItem, productsToolStripMenuItem, logOutToolStripMenuItem, exitToolStripMenuItem });
             mainMenuStrip.Location = new Point(0, 0);
             mainMenuStrip.Name = "mainMenuStrip";
             mainMenuStrip.Size = new Size(1163, 28);
@@ -54,6 +60,7 @@
             // 
             // ordersToolStripMenuItem
             // 
+            ordersToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viewOrdersToolStripMenuItem, orderManagementToolStripMenuItem });
             ordersToolStripMenuItem.Name = "ordersToolStripMenuItem";
             ordersToolStripMenuItem.Size = new Size(67, 24);
             ordersToolStripMenuItem.Text = "Orders";
@@ -64,30 +71,68 @@
             productsToolStripMenuItem.Size = new Size(80, 24);
             productsToolStripMenuItem.Text = "Products";
             // 
+            // logOutToolStripMenuItem
+            // 
+            logOutToolStripMenuItem.ForeColor = Color.Red;
+            logOutToolStripMenuItem.Name = "logOutToolStripMenuItem";
+            logOutToolStripMenuItem.Size = new Size(76, 24);
+            logOutToolStripMenuItem.Text = "Log Out";
+            // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.ForeColor = Color.Red;
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new Size(47, 24);
+            exitToolStripMenuItem.Text = "Exit";
+            // 
             // lbWelcome
             // 
             lbWelcome.AutoSize = true;
             lbWelcome.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
             lbWelcome.ForeColor = Color.FromArgb(255, 128, 0);
-            lbWelcome.Location = new Point(326, 51);
+            lbWelcome.Location = new Point(303, 23);
             lbWelcome.Name = "lbWelcome";
             lbWelcome.Size = new Size(447, 37);
             lbWelcome.TabIndex = 3;
             lbWelcome.Text = "Welcome to Sales Management App";
+            // 
+            // gbContent
+            // 
+            gbContent.Controls.Add(lbWelcome);
+            gbContent.Location = new Point(0, 31);
+            gbContent.Name = "gbContent";
+            gbContent.Size = new Size(1163, 442);
+            gbContent.TabIndex = 5;
+            gbContent.TabStop = false;
+            // 
+            // viewOrdersToolStripMenuItem
+            // 
+            viewOrdersToolStripMenuItem.Name = "viewOrdersToolStripMenuItem";
+            viewOrdersToolStripMenuItem.Size = new Size(224, 26);
+            viewOrdersToolStripMenuItem.Text = "View Orders";
+            // 
+            // orderManagementToolStripMenuItem
+            // 
+            orderManagementToolStripMenuItem.Name = "orderManagementToolStripMenuItem";
+            orderManagementToolStripMenuItem.Size = new Size(228, 26);
+            orderManagementToolStripMenuItem.Text = "Orders Management";
             // 
             // frmMain
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1163, 471);
-            Controls.Add(lbWelcome);
+            Controls.Add(gbContent);
             Controls.Add(mainMenuStrip);
             IsMdiContainer = true;
             MainMenuStrip = mainMenuStrip;
             Name = "frmMain";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Main";
             mainMenuStrip.ResumeLayout(false);
             mainMenuStrip.PerformLayout();
+            gbContent.ResumeLayout(false);
+            gbContent.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -99,5 +144,10 @@
         private ToolStripMenuItem membersToolStripMenuItem;
         private ToolStripMenuItem ordersToolStripMenuItem;
         private ToolStripMenuItem productsToolStripMenuItem;
+        private ToolStripMenuItem logOutToolStripMenuItem;
+        private GroupBox gbContent;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem viewOrdersToolStripMenuItem;
+        private ToolStripMenuItem orderManagementToolStripMenuItem;
     }
 }

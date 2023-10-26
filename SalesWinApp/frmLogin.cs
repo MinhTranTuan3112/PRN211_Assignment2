@@ -41,18 +41,26 @@ namespace SalesWinApp
 
         private void PerformLogin()
         {
-            string Email = txtEmail.Text;
-            string Password = txtPassword.Text;
-            var member = repository.Login(Email, Password);
-            if (member is not null)
+            try
             {
-                frmMain mainForm = new frmMain();
-                this.Hide();
-                mainForm.Show();
+                string Email = txtEmail.Text;
+                string Password = txtPassword.Text;
+                var member = repository.Login(Email, Password);
+                if (member is not null)
+                {
+                    MemberSession.member = member;
+                    frmMain mainForm = new frmMain();
+                    this.Hide();
+                    mainForm.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Wrong email or password", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("Wrong email or password", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error: {ex.Message}", "Login Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

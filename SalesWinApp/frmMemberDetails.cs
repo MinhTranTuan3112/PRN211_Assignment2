@@ -36,13 +36,19 @@ namespace SalesWinApp
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string Caption = (IsEdit) ? "Update member" : "Create member";
-            var Result = MessageBox.Show("Save this member?", Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (Result == DialogResult.Yes)
+            try
             {
-                SaveMember();
-                MessageBox.Show("Saved this member");
-                this.Close();
+                string Caption = (IsEdit) ? "Update member" : "Create member";
+                var Result = MessageBox.Show("Save this member?", Caption, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (Result == DialogResult.Yes)
+                {
+                    SaveMember();
+                    MessageBox.Show((IsEdit) ? "Updated this member" : "Added this member", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
+            } catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, (IsEdit) ? "Update Member Error" : "Add Member Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -68,21 +74,36 @@ namespace SalesWinApp
 
         private void SaveMember()
         {
-            var member = GetMemberData();
-            if (IsEdit)
+            try
             {
-                repository.UpdateMember(member);
+                var member = GetMemberData();
+                if (IsEdit)
+                {
+                    repository.UpdateMember(member);
+                }
+                else
+                {
+                    repository.AddMember(member);
+                }
+                this.Close();
             }
-            else
+            catch (Exception ex)
             {
-                repository.AddMember(member);
+                MessageBox.Show(ex.Message, (IsEdit) ? "Update Member Error" : "Add Member Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void frmMemberDetails_Load(object sender, EventArgs e)
         {
-            numMemberId.ReadOnly = (!IsEdit);
-            LoadMemberData();
+            try
+            {
+                numMemberId.ReadOnly = (!IsEdit);
+                LoadMemberData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Load Member Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LoadMemberData()

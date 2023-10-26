@@ -43,6 +43,7 @@
             lbMemberId = new Label();
             btnCreate = new Button();
             btnDelete = new Button();
+            btnUpdate = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvMembers).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numMemberId).BeginInit();
             SuspendLayout();
@@ -164,7 +165,7 @@
             // 
             // btnCreate
             // 
-            btnCreate.Location = new Point(973, 300);
+            btnCreate.Location = new Point(973, 330);
             btnCreate.Name = "btnCreate";
             btnCreate.Size = new Size(94, 29);
             btnCreate.TabIndex = 12;
@@ -174,18 +175,28 @@
             // btnDelete
             // 
             btnDelete.ForeColor = Color.Red;
-            btnDelete.Location = new Point(973, 357);
+            btnDelete.Location = new Point(973, 410);
             btnDelete.Name = "btnDelete";
             btnDelete.Size = new Size(94, 29);
             btnDelete.TabIndex = 14;
             btnDelete.Text = "Delete";
             btnDelete.UseVisualStyleBackColor = true;
             // 
+            // btnUpdate
+            // 
+            btnUpdate.Location = new Point(973, 239);
+            btnUpdate.Name = "btnUpdate";
+            btnUpdate.Size = new Size(94, 29);
+            btnUpdate.TabIndex = 15;
+            btnUpdate.Text = "Update";
+            btnUpdate.UseVisualStyleBackColor = true;
+            // 
             // frmMembers
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1099, 545);
+            Controls.Add(btnUpdate);
             Controls.Add(btnDelete);
             Controls.Add(btnCreate);
             Controls.Add(txtPassword);
@@ -226,5 +237,6 @@
         private TextBox txtCountry;
         private Button btnCreate;
         private Button btnDelete;
+        private Button btnUpdate;
     }
 }

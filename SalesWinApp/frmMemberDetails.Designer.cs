@@ -193,6 +193,7 @@
             Controls.Add(lbCountry);
             Controls.Add(label1);
             Name = "frmMemberDetails";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "Member Details";
             ((System.ComponentModel.ISupportInitialize)numMemberId).EndInit();
             ResumeLayout(false);

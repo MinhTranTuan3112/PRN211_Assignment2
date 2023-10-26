@@ -29,6 +29,12 @@ namespace SalesWinApp
             dgvMembers.CellDoubleClick += dgvMembers_CellDoubleClick;
             btnDelete.Click += btnDelete_Click;
             btnCreate.Click += btnCreate_Click;
+            btnUpdate.Click += btnUpdate_Click;
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            UpdateMember();
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
@@ -45,6 +51,11 @@ namespace SalesWinApp
 
         private void dgvMembers_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
+            UpdateMember();
+        }
+
+        private void UpdateMember()
+        {
             var member = GetMemberFromSelectingRow();
             var DetailsMemberForm = new frmMemberDetails()
             {
@@ -53,6 +64,7 @@ namespace SalesWinApp
             };
             if (DetailsMemberForm.ShowDialog() == DialogResult.OK)
             {
+                ClearText();
                 LoadMemberList();
             }
         }
