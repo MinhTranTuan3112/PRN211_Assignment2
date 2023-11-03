@@ -19,9 +19,9 @@ namespace DataAccess.Repository
             MemberDAO.Instance.DeleteMember(member);
         }
 
-        public List<Member> GetAllMembers()
+        public List<Member> GetAllMembers(string keyword="", string CompanyName="")
         {
-            return MemberDAO.Instance.GetAllMembers();
+            return MemberDAO.Instance.GetAllMembers(keyword, CompanyName);
         }
 
         public Member Login(string Email, string Password)

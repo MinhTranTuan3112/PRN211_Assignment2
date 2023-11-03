@@ -16,12 +16,27 @@ namespace SalesWinApp
     {
         private readonly IMemberRepository repository = new MemberRepository();
         public Member CurrentMember;
-        public bool IsEdit;
+        public bool IsEdit { get; set; }
+        public bool IsAdmin { get; set; }
 
-        public frmMemberDetails()
+        public frmMemberDetails(bool isEdit, bool isAdmin)
         {
+            this.IsEdit = isEdit;
             InitializeComponent();
+            Authenticate();
             RaiseEvent();
+        }
+
+        private void Authenticate()
+        {
+            if (IsEdit == true)
+            {
+                numMemberId.ReadOnly = true;
+            }
+            else
+            {
+                numMemberId.ReadOnly = false;
+            }
         }
 
         private void RaiseEvent()
@@ -34,6 +49,18 @@ namespace SalesWinApp
             };
         }
 
+        private void frmMemberDetails_Load(object sender, EventArgs e)
+        {
+            try
+            {  
+                LoadMemberData();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}", "Load Member Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
@@ -44,7 +71,7 @@ namespace SalesWinApp
                 {
                     SaveMember();
                     MessageBox.Show((IsEdit) ? "Updated this member" : "Added this member", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    this.Close();
+                    this.DialogResult = DialogResult.OK;
                 }
             } catch (Exception ex)
             {
@@ -79,30 +106,21 @@ namespace SalesWinApp
                 var member = GetMemberData();
                 if (IsEdit)
                 {
+                    if (MemberSession.member.MemberId == member.MemberId)
+                    {
+                        MemberSession.member = member;
+                    }
                     repository.UpdateMember(member);
                 }
                 else
                 {
                     repository.AddMember(member);
                 }
-                this.Close();
+                this.DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, (IsEdit) ? "Update Member Error" : "Add Member Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void frmMemberDetails_Load(object sender, EventArgs e)
-        {
-            try
-            {
-                numMemberId.ReadOnly = (!IsEdit);
-                LoadMemberData();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"{ex.Message}", "Load Member Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

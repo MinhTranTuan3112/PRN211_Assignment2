@@ -31,13 +31,13 @@
             mainMenuStrip = new MenuStrip();
             membersToolStripMenuItem = new ToolStripMenuItem();
             ordersToolStripMenuItem = new ToolStripMenuItem();
+            viewOrdersToolStripMenuItem = new ToolStripMenuItem();
             productsToolStripMenuItem = new ToolStripMenuItem();
+            infoToolStripMenuItem = new ToolStripMenuItem();
             logOutToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem = new ToolStripMenuItem();
             lbWelcome = new Label();
             gbContent = new GroupBox();
-            viewOrdersToolStripMenuItem = new ToolStripMenuItem();
-            orderManagementToolStripMenuItem = new ToolStripMenuItem();
             mainMenuStrip.SuspendLayout();
             gbContent.SuspendLayout();
             SuspendLayout();
@@ -45,7 +45,7 @@
             // mainMenuStrip
             // 
             mainMenuStrip.ImageScalingSize = new Size(20, 20);
-            mainMenuStrip.Items.AddRange(new ToolStripItem[] { membersToolStripMenuItem, ordersToolStripMenuItem, productsToolStripMenuItem, logOutToolStripMenuItem, exitToolStripMenuItem });
+            mainMenuStrip.Items.AddRange(new ToolStripItem[] { membersToolStripMenuItem, ordersToolStripMenuItem, productsToolStripMenuItem, infoToolStripMenuItem, logOutToolStripMenuItem, exitToolStripMenuItem });
             mainMenuStrip.Location = new Point(0, 0);
             mainMenuStrip.Name = "mainMenuStrip";
             mainMenuStrip.Size = new Size(1163, 28);
@@ -60,16 +60,28 @@
             // 
             // ordersToolStripMenuItem
             // 
-            ordersToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viewOrdersToolStripMenuItem, orderManagementToolStripMenuItem });
+            ordersToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { viewOrdersToolStripMenuItem });
             ordersToolStripMenuItem.Name = "ordersToolStripMenuItem";
             ordersToolStripMenuItem.Size = new Size(67, 24);
             ordersToolStripMenuItem.Text = "Orders";
+            // 
+            // viewOrdersToolStripMenuItem
+            // 
+            viewOrdersToolStripMenuItem.Name = "viewOrdersToolStripMenuItem";
+            viewOrdersToolStripMenuItem.Size = new Size(224, 26);
+            viewOrdersToolStripMenuItem.Text = "View Orders";
             // 
             // productsToolStripMenuItem
             // 
             productsToolStripMenuItem.Name = "productsToolStripMenuItem";
             productsToolStripMenuItem.Size = new Size(80, 24);
             productsToolStripMenuItem.Text = "Products";
+            // 
+            // infoToolStripMenuItem
+            // 
+            infoToolStripMenuItem.Name = "infoToolStripMenuItem";
+            infoToolStripMenuItem.Size = new Size(49, 24);
+            infoToolStripMenuItem.Text = "Info";
             // 
             // logOutToolStripMenuItem
             // 
@@ -105,18 +117,6 @@
             gbContent.TabIndex = 5;
             gbContent.TabStop = false;
             // 
-            // viewOrdersToolStripMenuItem
-            // 
-            viewOrdersToolStripMenuItem.Name = "viewOrdersToolStripMenuItem";
-            viewOrdersToolStripMenuItem.Size = new Size(224, 26);
-            viewOrdersToolStripMenuItem.Text = "View Orders";
-            // 
-            // orderManagementToolStripMenuItem
-            // 
-            orderManagementToolStripMenuItem.Name = "orderManagementToolStripMenuItem";
-            orderManagementToolStripMenuItem.Size = new Size(228, 26);
-            orderManagementToolStripMenuItem.Text = "Orders Management";
-            // 
             // frmMain
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -148,6 +148,6 @@
         private GroupBox gbContent;
         private ToolStripMenuItem exitToolStripMenuItem;
         private ToolStripMenuItem viewOrdersToolStripMenuItem;
-        private ToolStripMenuItem orderManagementToolStripMenuItem;
+        private ToolStripMenuItem infoToolStripMenuItem;
     }
 }

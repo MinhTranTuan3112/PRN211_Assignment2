@@ -41,10 +41,20 @@ namespace DataAccess
             return _context.Members.FirstOrDefault(member => member.Email.Equals(Email) && member.Password.Equals(Password));
         }
 
-        public List<Member> GetAllMembers()
+        public List<Member> GetAllMembers(string keyword = "", string CompanyName = "")
         {
             using var _context = new SalesManagementDbContext();
-            return _context.Members.ToList();
+            var query = _context.Members.AsQueryable();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query.Where(member => member.Email.ToLower().Contains(keyword.ToLower()));
+            }
+            if (!string.IsNullOrEmpty(CompanyName))
+            {
+                query = query.Where(member => member.CompanyName.Equals(CompanyName));
+            }
+            query = query.OrderBy(member => member.MemberId);
+            return query.ToList();
         }
 
         public void UpdateMember(Member member)

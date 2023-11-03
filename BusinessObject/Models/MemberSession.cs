@@ -8,6 +8,6 @@ namespace BusinessObject.Models
 {
     public static class MemberSession
     {
-        public static Member member;
+        public static Member member = null;
     }
 }

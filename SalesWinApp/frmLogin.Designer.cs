@@ -34,6 +34,7 @@
             txtEmail = new TextBox();
             txtPassword = new TextBox();
             btnLogin = new Button();
+            btnClose = new Button();
             SuspendLayout();
             // 
             // lbLogin
@@ -91,11 +92,23 @@
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = true;
             // 
+            // btnClose
+            // 
+            btnClose.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
+            btnClose.ForeColor = Color.Red;
+            btnClose.Location = new Point(400, 331);
+            btnClose.Name = "btnClose";
+            btnClose.Size = new Size(126, 56);
+            btnClose.TabIndex = 9;
+            btnClose.Text = "Close";
+            btnClose.UseVisualStyleBackColor = true;
+            // 
             // frmLogin
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(982, 443);
+            Controls.Add(btnClose);
             Controls.Add(btnLogin);
             Controls.Add(txtPassword);
             Controls.Add(txtEmail);
@@ -116,5 +129,6 @@
         private TextBox txtEmail;
         private TextBox txtPassword;
         private Button btnLogin;
+        private Button btnClose;
     }
 }

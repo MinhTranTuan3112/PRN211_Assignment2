@@ -1,16 +1,18 @@
 ﻿using BusinessObject.Models;
 using DataAccess.Repository;
-
 namespace SalesWinApp
 {
     public partial class frmProducts : Form
     {
         //Fields
         private readonly IProductRepository productRepository = new ProductRepository();
-        private readonly IOrderRepository orderRepository = new OrderResository();
+        private readonly IOrderRepository orderRepository = new OrderRepository();
         private readonly IOrderDetailRepository orderDetailRepository = new OrderDetailRepository();
         private BindingSource source;
         private FilterProductData FilterData = new FilterProductData();
+        private Order CurrentOrder = null;
+        private List<OrderDetail> OrderDetailsList = new List<OrderDetail>();
+        private decimal TotalPrice = decimal.Zero;
 
         int ProductId
         {
@@ -48,19 +50,41 @@ namespace SalesWinApp
             set => txtUnitsInStock.Text = value.ToString();
         }
 
+        public bool IsAdmin { get; set; } = false;
 
         //Constructors
-        public frmProducts()
+        public frmProducts(bool isAdmin)
         {
+            this.IsAdmin = isAdmin;
             InitializeComponent();
+            Authentication();
             RaiseEvent();
+        }
+
+        private void Authentication()
+        {
+            if (IsAdmin == true)
+            {
+                gbOrder.Visible = false;
+            }
+            else
+            {
+                gbOrder.Visible = true;
+                btnCreate.Visible = false;
+                btnUpdate.Visible = false;
+                btnDelete.Visible = false;
+            }
         }
 
         private void RaiseEvent()
         {
             this.Load += frmProducts_Load;
             dgvProducts.SelectionChanged += dgvProducts_SelectionChanged;
-            dgvProducts.CellDoubleClick += dgvProducts_CellDoubleClick;
+            if (IsAdmin == true)
+            {
+                dgvProducts.CellDoubleClick += dgvProducts_CellDoubleClick;
+
+            }
             btnCreate.Click += btnCreate_Click;
             btnUpdate.Click += btnUpdate_Click;
             btnDelete.Click += btnDelete_Click;
@@ -73,7 +97,56 @@ namespace SalesWinApp
             txtMaxPrice.TextChanged += txtMaxPrice_TextChanged;
             txtMinUnit.TextChanged += txtMinUnit_TextChanged;
             txtMaxUnit.TextChanged += txtMaxUnit_TextChanged;
+
+            btnRemoveOrderedProduct.Click += btnRemoveOrderedProduct_Click;
+            btnSubmitOrder.Click += btnSubmitOrder_Click;
         }
+
+        private void btnSubmitOrder_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Submit this order?", "Submit order", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                SubmitOrder();
+            }
+        }
+
+        private void SubmitOrder()
+        {
+            try
+            {
+                if (OrderDetailsList.Count == 0)
+                {
+                    throw new Exception("There is no product");
+                }
+                CurrentOrder.OrderDetails = OrderDetailsList;
+                orderDetailRepository.AddOrderDetailsList(OrderDetailsList);
+                CurrentOrder.Freight = TotalPrice;
+                orderRepository.UpdateOrder(CurrentOrder);
+                MessageBox.Show("Submitted this order!");
+                CurrentOrder = null;
+                OrderDetailsList.Clear();
+                txtTotalPrice.Text = "0";
+                TotalPrice = decimal.Zero;
+                LoadOrderDetailsList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Submit Order Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void btnRemoveOrderedProduct_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Remove this product from order list?", "Remove ordered product", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                RemoveOrderedProduct();
+            }
+        }
+
+
 
         private void txtMaxUnit_TextChanged(object sender, EventArgs e)
         {
@@ -164,7 +237,7 @@ namespace SalesWinApp
                     {
                         throw new Exception("Invalid product quantity!");
                     }
-                    OrderProduct();
+                    AddProductToCart();
                 }
                 catch (Exception ex)
                 {
@@ -173,26 +246,102 @@ namespace SalesWinApp
             }
         }
 
-        private void OrderProduct()
+        private void RemoveOrderedProduct()
         {
-            var member = MemberSession.member;
-            var product = GetCurrentProductRow();
-            var order = orderRepository.AddNewOrder(new Order
+            if (dgvOrderProducts.SelectedRows.Count <= 0)
             {
-                MemberId = member.MemberId,
-                OrderDate = DateTime.Now,
-                Freight = product.UnitPrice
-            });
-            var orderDetail = new OrderDetail
+                MessageBox.Show("There is no products to remove", "Remove order product", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            try
             {
-                OrderId = order.OrderId,
-                ProductId = product.ProductId,
-                Quantity = Convert.ToInt32(numQuantity.Value),
-                UnitPrice = product.UnitPrice,
-                Discount = 0
-            };
-            orderDetailRepository.AddNewOrderDetail(orderDetail);
-            MessageBox.Show("Ordered this product!!", "Order Product", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                var selectedRow = dgvOrderProducts.SelectedRows[0];
+                int ProductId = Convert.ToInt32(selectedRow.Cells["ProductId"].Value);
+
+                orderDetailRepository.RemoveByIds(CurrentOrder.OrderId, ProductId);
+                LoadOrderDetailsList();
+                UpdateTotalPrice();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Remove order product error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadOrderDetailsList()
+        {
+            if (OrderDetailsList.Count == 0)
+            {
+                MessageBox.Show("No products in cart found!", "Order Details", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                dgvOrderProducts.Rows.Clear();
+                return;
+            }
+            try
+            {
+                var datasource = OrderDetailsList.Select(orderdetails => new
+                {
+                    ProductId = orderdetails.ProductId,
+                    OrderDate = orderdetails.Order.OrderDate,
+                    ProductName = orderdetails.Product.ProductName,
+                    Quantity = orderdetails.Quantity,
+                    UnitPrice = orderdetails.UnitPrice,
+                    Discount = orderdetails.Discount
+                }).ToList();
+
+                dgvOrderProducts.DataSource = null;
+                dgvOrderProducts.DataSource = datasource;
+                dgvOrderProducts.Columns["ProductId"].Visible = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Load Ordered Product Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AddProductToCart()
+        {
+            try
+            {
+                var member = MemberSession.member;
+                var product = GetCurrentProductRow();
+                int quantity = Convert.ToInt32(numQuantity.Value);
+                if (CurrentOrder is null)
+                {
+                    CurrentOrder = orderRepository.AddNewOrder(new Order
+                    {
+                        MemberId = member.MemberId,
+                        OrderDate = DateTime.Now,
+                        Freight = 0
+                    });
+                }
+
+                OrderDetailsList.Add(new OrderDetail
+                {
+                    OrderId = CurrentOrder.OrderId,
+                    ProductId = product.ProductId,
+                    Product = product,
+                    Order = CurrentOrder,
+                    Quantity = quantity,
+                    UnitPrice = UnitPrice,
+                    Discount = 0
+                });
+                LoadOrderDetailsList();
+                UpdateTotalPrice();
+                MessageBox.Show("Added this product to order list!!", "Order Product", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Add Product to cart error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void UpdateTotalPrice()
+        {
+            foreach (var orderDetail in OrderDetailsList)
+            {
+                TotalPrice += orderDetail.Quantity * orderDetail.UnitPrice;
+            }
+            txtTotalPrice.Text = string.Format("{0:F0}", TotalPrice);
         }
 
         private void btnDelete_Click(object sender, EventArgs e)

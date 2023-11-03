@@ -13,5 +13,29 @@ namespace DataAccess.Repository
         {
             OrderDetailDAO.Instance.AddNewOrderDetail(orderDetail);
         }
+
+        public void AddOrderDetailsList(List<OrderDetail> orderDetailsList)
+        {
+            OrderDetailDAO.Instance.AddOrderDetailsList(orderDetailsList);
+        }
+
+        public OrderDetail GetOrderDetail(int OrderId, int ProductId)
+        {
+            return OrderDetailDAO.Instance.GetOrderDetail(OrderId, ProductId);
+        }
+
+        public void Remove(OrderDetail orderDetail)
+        {
+            OrderDetailDAO.Instance.Remove(orderDetail);
+        }
+
+        public void RemoveByIds(int OrderId, int ProductId)
+        {
+            OrderDetailDAO.Instance.RemoveByIds(OrderId, ProductId);
+        }
+        public List<OrderDetail> GetOrderDetailsListFromOrder(int OrderId)
+        {
+            return OrderDetailDAO.Instance.GetOrderDetailsListFromOrder(OrderId);
+        }
     }
 }

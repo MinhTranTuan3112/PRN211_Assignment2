@@ -14,11 +14,25 @@ namespace SalesWinApp
 {
     public partial class frmMembers : Form
     {
-        private readonly IMemberRepository repository = new MemberRepository();
+        private readonly IMemberRepository memberRepository = new MemberRepository();
+        private readonly IOrderRepository orderRepository = new OrderRepository();
         private BindingSource source;
+
+        string Keyword
+        {
+            get => txtKeyword.Text.Trim();
+            set => txtKeyword.Text = value;
+        }
+
+        string companyName
+        {
+            get => cbCompanyName.SelectedItem?.ToString() ?? string.Empty;
+        }
+
         public frmMembers()
         {
             InitializeComponent();
+            InitializeData();
             RaiseEvent();
         }
 
@@ -30,19 +44,80 @@ namespace SalesWinApp
             btnDelete.Click += btnDelete_Click;
             btnCreate.Click += btnCreate_Click;
             btnUpdate.Click += btnUpdate_Click;
+
+            btnSearch.Click += btnSearch_Click;
+            cbCompanyName.KeyPress += cbCompanyName_KeyPress;
+            btnResetFilter.Click += btnResetFilter_Click;
+        }
+
+        private void btnResetFilter_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure you want to reset the filter?", "Reset Filter", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                ResetFilter();
+                LoadMemberList();
+            }
+        }
+
+        private void ResetFilter()
+        {
+            txtKeyword.Clear();
+            cbCompanyName.SelectedIndex = -1;
+        }
+
+        private void cbCompanyName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            SearchMembers();
+        }
+
+        private void SearchMembers()
+        {
+            var MemberList = memberRepository.GetAllMembers(Keyword, companyName);
+            source = new BindingSource();
+            source.DataSource = MemberList;
+
+            numMemberId.DataBindings.Clear();
+            txtEmail.DataBindings.Clear();
+            txtCompanyName.DataBindings.Clear();
+            txtCountry.DataBindings.Clear();
+            txtCity.DataBindings.Clear();
+            txtPassword.DataBindings.Clear();
+
+
+            numMemberId.DataBindings.Add("Text", source, "MemberId");
+            txtEmail.DataBindings.Add("Text", source, "Email");
+            txtCompanyName.DataBindings.Add("Text", source, "CompanyName");
+            txtCity.DataBindings.Add("Text", source, "City");
+            txtCountry.DataBindings.Add("Text", source, "Country");
+            txtPassword.DataBindings.Add("Text", source, "Password");
+
+
+            dgvMembers.DataSource = null;
+            dgvMembers.DataSource = MemberList;
+            dgvMembers.Columns["Orders"].Visible = false;
+        }
+
+        private void InitializeData()
+        {
+            var companyNameList = memberRepository.GetAllMembers().Select(member => member.CompanyName).ToArray();
+            cbCompanyName.Items.AddRange(companyNameList);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
             UpdateMember();
+            InitializeData();
         }
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            var DetailsMemberForm = new frmMemberDetails()
-            {
-                IsEdit = false
-            };
+            var DetailsMemberForm = new frmMemberDetails(false, true);
             if (DetailsMemberForm.ShowDialog() == DialogResult.OK)
             {
                 LoadMemberList();
@@ -52,14 +127,14 @@ namespace SalesWinApp
         private void dgvMembers_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             UpdateMember();
+            InitializeData();
         }
 
         private void UpdateMember()
         {
             var member = GetMemberFromSelectingRow();
-            var DetailsMemberForm = new frmMemberDetails()
+            var DetailsMemberForm = new frmMemberDetails(true, true)
             {
-                IsEdit = true,
                 CurrentMember = member
             };
             if (DetailsMemberForm.ShowDialog() == DialogResult.OK)
@@ -75,6 +150,7 @@ namespace SalesWinApp
             if (result == DialogResult.Yes)
             {
                 DeleteMember();
+                InitializeData();
             }
         }
 
@@ -107,7 +183,13 @@ namespace SalesWinApp
         private void DeleteMember()
         {
             var member = GetMemberFromSelectingRow();
-            repository.DeleteMember(member);
+            var orderList = orderRepository.GetOrdersByMemberID(member.MemberId);
+            if (orderList.Count > 0)
+            {
+                orderRepository.DeleteMemberOrders(member.MemberId);
+            }
+            memberRepository.DeleteMember(member);
+            ClearText();
             LoadMemberList();
         }
 
@@ -153,9 +235,10 @@ namespace SalesWinApp
 
         private void LoadMemberList()
         {
-            var MemberList = repository.GetAllMembers();
+            var MemberList = memberRepository.GetAllMembers();
             source = new BindingSource();
             source.DataSource = MemberList;
+
             numMemberId.DataBindings.Clear();
             txtEmail.DataBindings.Clear();
             txtCompanyName.DataBindings.Clear();
@@ -174,7 +257,7 @@ namespace SalesWinApp
 
             dgvMembers.DataSource = null;
             dgvMembers.DataSource = MemberList;
-
+            dgvMembers.Columns["Orders"].Visible = false;
         }
     }
 }

@@ -71,6 +71,26 @@ namespace SalesWinApp
             try
             {
                 var product = GetProductData();
+                if (product.ProductId <= 0)
+                {
+                    throw new Exception("Invalid product id");
+                }
+                if (string.IsNullOrEmpty(product.ProductName))
+                {
+                    throw new Exception("Product name can't be empty");
+                }
+                if (string.IsNullOrEmpty(product.Weight))
+                {
+                    throw new Exception("Product weight can't be empty");
+                }
+                if (product.UnitPrice <= 0)
+                {
+                    throw new Exception("Invalid unit price");
+                }
+                if (product.UnitsInStock <= 0)
+                {
+                    throw new Exception("Invalid units in stock");
+                }
                 if (IsEdit)
                 {
                     repository.UpdateProduct(product);
@@ -81,7 +101,7 @@ namespace SalesWinApp
                     repository.AddProduct(product);
                     MessageBox.Show("Added this product!");
                 }
-                this.Close();
+                this.DialogResult = DialogResult.OK;
             }
             catch (Exception ex)
             {

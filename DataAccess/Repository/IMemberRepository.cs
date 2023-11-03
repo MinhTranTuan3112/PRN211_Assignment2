@@ -10,7 +10,7 @@ namespace DataAccess.Repository
     public interface IMemberRepository
     {
         public Member Login(string Email, string Password);
-        public List<Member> GetAllMembers();
+        public List<Member> GetAllMembers(string keyword = "", string CompanyName="");
         public void UpdateMember(Member member);
         public void AddMember(Member member);
         public void DeleteMember(Member member);

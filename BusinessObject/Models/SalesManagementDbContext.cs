@@ -32,7 +32,6 @@ public partial class SalesManagementDbContext : DbContext
         return configuration["ConnectionStrings:DefaultConnection"];
     }
 
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer(GetConnectionString());
 
@@ -40,7 +39,7 @@ public partial class SalesManagementDbContext : DbContext
     {
         modelBuilder.Entity<Member>(entity =>
         {
-            entity.HasKey(e => e.MemberId).HasName("PK__Member__0CF04B1807AB0BFD");
+            entity.HasKey(e => e.MemberId).HasName("PK__Member__0CF04B1851E21CE7");
 
             entity.ToTable("Member");
 
@@ -69,7 +68,7 @@ public partial class SalesManagementDbContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Order__C3905BCFB283C6B2");
+            entity.HasKey(e => e.OrderId).HasName("PK__Order__C3905BCF0F2B0E56");
 
             entity.ToTable("Order");
 
@@ -86,11 +85,15 @@ public partial class SalesManagementDbContext : DbContext
 
         modelBuilder.Entity<OrderDetail>(entity =>
         {
-            entity.HasKey(e => new { e.OrderId, e.ProductId }).HasName("PK__OrderDet__08D097A3BE234C32");
+            entity.HasKey(e => new { e.OrderId, e.ProductId }).HasName("PK__OrderDet__08D097A3C2E0F6C1");
 
             entity.ToTable("OrderDetail");
 
             entity.Property(e => e.UnitPrice).HasColumnType("money");
+
+            // Exclude identity for OrderId and ProductId
+            entity.Property(e => e.OrderId).ValueGeneratedNever();
+            entity.Property(e => e.ProductId).ValueGeneratedNever();
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderDetails)
                 .HasForeignKey(d => d.OrderId)
@@ -105,7 +108,7 @@ public partial class SalesManagementDbContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6CD77D94318");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6CD7DD5DD1E");
 
             entity.ToTable("Product");
 

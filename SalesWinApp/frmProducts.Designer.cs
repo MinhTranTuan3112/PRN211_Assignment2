@@ -30,10 +30,11 @@
         {
             tcProducts = new TabControl();
             tpMain = new TabPage();
-            label8 = new Label();
-            btnOrder = new Button();
-            txtCategoryId = new TextBox();
+            gbOrder = new GroupBox();
             numQuantity = new NumericUpDown();
+            btnOrder = new Button();
+            label8 = new Label();
+            txtCategoryId = new TextBox();
             btnDelete = new Button();
             btnUpdate = new Button();
             btnCreate = new Button();
@@ -62,16 +63,22 @@
             txtMinPrice = new TextBox();
             label2 = new Label();
             txtKeyword = new TextBox();
-            label1 = new Label();
-            numProductIdFilter = new NumericUpDown();
             tpOrder = new TabPage();
+            txtTotalPrice = new TextBox();
+            label10 = new Label();
+            btnRemoveOrderedProduct = new Button();
+            btnSubmitOrder = new Button();
+            label9 = new Label();
+            dgvOrderProducts = new DataGridView();
             dgvProducts = new DataGridView();
             tcProducts.SuspendLayout();
             tpMain.SuspendLayout();
+            gbOrder.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numQuantity).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numProductId).BeginInit();
             tpFilter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numProductIdFilter).BeginInit();
+            tpOrder.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvOrderProducts).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvProducts).BeginInit();
             SuspendLayout();
             // 
@@ -83,15 +90,13 @@
             tcProducts.Location = new Point(12, 12);
             tcProducts.Name = "tcProducts";
             tcProducts.SelectedIndex = 0;
-            tcProducts.Size = new Size(1044, 247);
+            tcProducts.Size = new Size(1044, 308);
             tcProducts.TabIndex = 0;
             // 
             // tpMain
             // 
-            tpMain.Controls.Add(label8);
-            tpMain.Controls.Add(btnOrder);
+            tpMain.Controls.Add(gbOrder);
             tpMain.Controls.Add(txtCategoryId);
-            tpMain.Controls.Add(numQuantity);
             tpMain.Controls.Add(btnDelete);
             tpMain.Controls.Add(btnUpdate);
             tpMain.Controls.Add(btnCreate);
@@ -109,28 +114,47 @@
             tpMain.Location = new Point(4, 29);
             tpMain.Name = "tpMain";
             tpMain.Padding = new Padding(3);
-            tpMain.Size = new Size(1036, 214);
+            tpMain.Size = new Size(1036, 275);
             tpMain.TabIndex = 0;
             tpMain.Text = "Main";
             tpMain.UseVisualStyleBackColor = true;
             // 
-            // label8
+            // gbOrder
             // 
-            label8.AutoSize = true;
-            label8.Location = new Point(813, 120);
-            label8.Name = "label8";
-            label8.Size = new Size(65, 20);
-            label8.TabIndex = 18;
-            label8.Text = "Quantity";
+            gbOrder.Controls.Add(numQuantity);
+            gbOrder.Controls.Add(btnOrder);
+            gbOrder.Controls.Add(label8);
+            gbOrder.Location = new Point(754, 94);
+            gbOrder.Name = "gbOrder";
+            gbOrder.Size = new Size(250, 125);
+            gbOrder.TabIndex = 19;
+            gbOrder.TabStop = false;
+            gbOrder.Text = "Order";
+            // 
+            // numQuantity
+            // 
+            numQuantity.Location = new Point(90, 41);
+            numQuantity.Name = "numQuantity";
+            numQuantity.Size = new Size(94, 27);
+            numQuantity.TabIndex = 17;
             // 
             // btnOrder
             // 
-            btnOrder.Location = new Point(896, 163);
+            btnOrder.Location = new Point(90, 75);
             btnOrder.Name = "btnOrder";
             btnOrder.Size = new Size(94, 29);
             btnOrder.TabIndex = 15;
             btnOrder.Text = "Order";
             btnOrder.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(6, 41);
+            label8.Name = "label8";
+            label8.Size = new Size(65, 20);
+            label8.TabIndex = 18;
+            label8.Text = "Quantity";
             // 
             // txtCategoryId
             // 
@@ -139,13 +163,6 @@
             txtCategoryId.ReadOnly = true;
             txtCategoryId.Size = new Size(150, 27);
             txtCategoryId.TabIndex = 16;
-            // 
-            // numQuantity
-            // 
-            numQuantity.Location = new Point(896, 118);
-            numQuantity.Name = "numQuantity";
-            numQuantity.Size = new Size(94, 27);
-            numQuantity.TabIndex = 17;
             // 
             // btnDelete
             // 
@@ -284,12 +301,10 @@
             tpFilter.Controls.Add(txtMinPrice);
             tpFilter.Controls.Add(label2);
             tpFilter.Controls.Add(txtKeyword);
-            tpFilter.Controls.Add(label1);
-            tpFilter.Controls.Add(numProductIdFilter);
             tpFilter.Location = new Point(4, 29);
             tpFilter.Name = "tpFilter";
             tpFilter.Padding = new Padding(3);
-            tpFilter.Size = new Size(1036, 214);
+            tpFilter.Size = new Size(1036, 275);
             tpFilter.TabIndex = 1;
             tpFilter.Text = "Filter";
             tpFilter.UseVisualStyleBackColor = true;
@@ -408,41 +423,92 @@
             txtKeyword.Size = new Size(231, 27);
             txtKeyword.TabIndex = 2;
             // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(16, 60);
-            label1.Name = "label1";
-            label1.Size = new Size(77, 20);
-            label1.TabIndex = 1;
-            label1.Text = "Product Id";
-            // 
-            // numProductIdFilter
-            // 
-            numProductIdFilter.Location = new Point(138, 60);
-            numProductIdFilter.Name = "numProductIdFilter";
-            numProductIdFilter.Size = new Size(150, 27);
-            numProductIdFilter.TabIndex = 0;
-            // 
             // tpOrder
             // 
+            tpOrder.Controls.Add(txtTotalPrice);
+            tpOrder.Controls.Add(label10);
+            tpOrder.Controls.Add(btnRemoveOrderedProduct);
+            tpOrder.Controls.Add(btnSubmitOrder);
+            tpOrder.Controls.Add(label9);
+            tpOrder.Controls.Add(dgvOrderProducts);
             tpOrder.Location = new Point(4, 29);
             tpOrder.Name = "tpOrder";
-            tpOrder.Size = new Size(1036, 214);
+            tpOrder.Size = new Size(1036, 275);
             tpOrder.TabIndex = 2;
             tpOrder.Text = "Order";
             tpOrder.UseVisualStyleBackColor = true;
             // 
+            // txtTotalPrice
+            // 
+            txtTotalPrice.Location = new Point(96, 229);
+            txtTotalPrice.Name = "txtTotalPrice";
+            txtTotalPrice.ReadOnly = true;
+            txtTotalPrice.Size = new Size(125, 27);
+            txtTotalPrice.TabIndex = 5;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(13, 232);
+            label10.Name = "label10";
+            label10.Size = new Size(77, 20);
+            label10.TabIndex = 4;
+            label10.Text = "TotalPrice:";
+            // 
+            // btnRemoveOrderedProduct
+            // 
+            btnRemoveOrderedProduct.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
+            btnRemoveOrderedProduct.ForeColor = Color.Red;
+            btnRemoveOrderedProduct.Location = new Point(825, 98);
+            btnRemoveOrderedProduct.Name = "btnRemoveOrderedProduct";
+            btnRemoveOrderedProduct.Size = new Size(109, 63);
+            btnRemoveOrderedProduct.TabIndex = 3;
+            btnRemoveOrderedProduct.Text = "Remove";
+            btnRemoveOrderedProduct.UseVisualStyleBackColor = true;
+            // 
+            // btnSubmitOrder
+            // 
+            btnSubmitOrder.ForeColor = Color.Red;
+            btnSubmitOrder.Location = new Point(368, 229);
+            btnSubmitOrder.Name = "btnSubmitOrder";
+            btnSubmitOrder.Size = new Size(147, 29);
+            btnSubmitOrder.TabIndex = 2;
+            btnSubmitOrder.Text = "Submit Order";
+            btnSubmitOrder.UseVisualStyleBackColor = true;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Font = new Font("Segoe UI", 13F, FontStyle.Regular, GraphicsUnit.Point);
+            label9.ForeColor = Color.FromArgb(255, 128, 0);
+            label9.Location = new Point(13, 13);
+            label9.Name = "label9";
+            label9.Size = new Size(134, 30);
+            label9.TabIndex = 1;
+            label9.Text = "Product Cart";
+            // 
+            // dgvOrderProducts
+            // 
+            dgvOrderProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvOrderProducts.Location = new Point(13, 46);
+            dgvOrderProducts.Name = "dgvOrderProducts";
+            dgvOrderProducts.ReadOnly = true;
+            dgvOrderProducts.RowHeadersWidth = 51;
+            dgvOrderProducts.RowTemplate.Height = 29;
+            dgvOrderProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvOrderProducts.Size = new Size(790, 167);
+            dgvOrderProducts.TabIndex = 0;
+            // 
             // dgvProducts
             // 
             dgvProducts.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvProducts.Location = new Point(12, 271);
+            dgvProducts.Location = new Point(12, 326);
             dgvProducts.Name = "dgvProducts";
             dgvProducts.ReadOnly = true;
             dgvProducts.RowHeadersWidth = 51;
             dgvProducts.RowTemplate.Height = 29;
             dgvProducts.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvProducts.Size = new Size(1040, 260);
+            dgvProducts.Size = new Size(1040, 205);
             dgvProducts.TabIndex = 1;
             // 
             // frmProducts
@@ -450,18 +516,22 @@
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1068, 543);
-            Controls.Add(dgvProducts);
             Controls.Add(tcProducts);
+            Controls.Add(dgvProducts);
             Name = "frmProducts";
             Text = "Products Management";
             tcProducts.ResumeLayout(false);
             tpMain.ResumeLayout(false);
             tpMain.PerformLayout();
+            gbOrder.ResumeLayout(false);
+            gbOrder.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numQuantity).EndInit();
             ((System.ComponentModel.ISupportInitialize)numProductId).EndInit();
             tpFilter.ResumeLayout(false);
             tpFilter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numProductIdFilter).EndInit();
+            tpOrder.ResumeLayout(false);
+            tpOrder.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dgvOrderProducts).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvProducts).EndInit();
             ResumeLayout(false);
         }
@@ -488,8 +558,6 @@
         private Button btnCreate;
         private Label label2;
         private TextBox txtKeyword;
-        private Label label1;
-        private NumericUpDown numProductIdFilter;
         private TextBox txtMaxPrice;
         private TextBox txtMinPrice;
         private Label label4;
@@ -506,5 +574,12 @@
         private TabPage tpOrder;
         private Label label8;
         private NumericUpDown numQuantity;
+        private Label label9;
+        private DataGridView dgvOrderProducts;
+        private Button btnSubmitOrder;
+        private Button btnRemoveOrderedProduct;
+        private GroupBox gbOrder;
+        private TextBox txtTotalPrice;
+        private Label label10;
     }
 }
